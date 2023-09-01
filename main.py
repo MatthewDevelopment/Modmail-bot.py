@@ -5,6 +5,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
 client = commands.Bot(command_prefix= commands.when_mentioned_or('>'), intents=intents)
+client.remove_command("help")
 
 @client.event
 async def on_ready():
@@ -32,10 +33,19 @@ async def on_message(message):
 
 
 @client.command()
+async def help(ctx):
+    embed = discord.Embed(title="Modmail Bot", description="Here is my list of Commands", color=(58101))
+    embed.add_field(name="General", value=">help - This message\n>ping - Get the Bot latency\n>setupguide - Instructions on how to setup the modmail system>setupmodmail - Setup the Modmail channel.", inline=False)
+    embed.add_field(name="Source Code", value="https://github.com/MatthewDevelopment/Modmail-bot.py", inline=False)
+    await ctx.send(embed=embed)
+
+@client.command()
 async def ping(ctx):
     await ctx.send(f'PONG!\nLatency: {round(client.latency * 1000)}ms')
 
 @client.command()
+@commands.has_permissions(manage_guild=True)
+@commands.bot_has_permissions(manage_channels=True)
 async def setupmodmail(ctx):
     channel = await guild.create_text_channel('modmail')
     guild = ctx.guild
@@ -43,6 +53,22 @@ async def setupmodmail(ctx):
     role = discord.utils.get(guild.roles, name="@everyone")
     await channel.set_permissions(role, send_messages=False, read_messages=False)
     await ctx.send("The Modmail channel has been set up.")
+
+@setupmodmail.error
+async def setupmodmail_error(ctx, error):
+    if isinstance(error, commands.BotMissingPermissions):
+        await ctx.send("AN ERROR HAS OCCURED\nI do not have permissions to manage channels. Please make sure I have the **MANAGE_CHANNELS** permission and try again")
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send('AN ERROR HAS OCCURED\nYou need to have **MANAGE_GUILD** permission to use this command.')
+    else:
+        raise error
+
+@client.command()
+async def setupguide(ctx):
+    embed = discord.Embed(title="Modmail Bot", description="Here is instructions on how to setup the basic modmail system", color=(58101))
+    embed.add_field(name="Steps", value="After inviting me, create a channel called modmail or run my setupmodmail command and I will set up the channel for you. Note that if you use the command, you need Manage Server permissions and I need Manage channel permissions.", inline=False)
+    embed.add_field(name="More info", value="The Github repo has a README file for detailed information: https://github.com/MatthewDevelopment/Modmail-bot.py", inline=False)
+    await ctx.send(embed=embed)
 
 
 

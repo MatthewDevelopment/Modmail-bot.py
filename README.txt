@@ -5,8 +5,12 @@ SOURCE CODE: DISCORD.PY MODMAIL BOT BASIC
 VERSION 2:
 - MORE ENHANCED
 - You can add commands to it.
-- Create the Modmail channel with a command.
+- Create the Modmail channel called #modmail or run the setupmodmail command for the bot to create it for you.
+	- If you choose to setup modmail using the command, make sure the bot has Manage channels permission and you have manage guild permission.
 - Now in the Modmail channel, you can see the USER ID to reply back to them.
+
+Command for giving permissions to .sh file:   chmod +x start.sh
+Command to run .sh file:   sh start.sh
 
 ========================================================
 
@@ -28,8 +32,7 @@ Luckily the bot includes
 
 This is how replies should look
 <@!UserID> your message here
-This version now shows the user id in the modmail channel so you can easily reply back to them
-with the <@!UserID> method instead of straight mentioning it.
+This version now shows the user id in the modmail channel so you can easily reply back to them with the <@!UserID> method instead of straight mentioning it.
 
 =========================================================
 
